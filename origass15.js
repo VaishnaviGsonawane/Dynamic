@@ -1,55 +1,38 @@
 console.log('person1: shows ticket');
 console.log('person2: shows ticket');
 
+const promiseWifeBringingTickets = new Promise((resolve, reject) => {
+    setTimeout(() => resolve('ticket'), 3000);
+});
+
+const getPopcorn = new Promise((resolve, reject) => resolve('popcorn'));
+
+const getColdDrinks = new Promise((resolve, reject) => {
+    setTimeout(() => resolve('cold drinks'), 2000);
+});
+
+const getCandy = new Promise((resolve, reject) => resolve('candy'));
+
+const getCoke = new Promise((resolve, reject) => resolve('coke'));
+
+const addButter = new Promise((resolve, reject) => resolve('butter'));
 
 const preMovie = async () => {
-    
-    const promiseWifeBringingTickets =new Promise((resolve ,reject) => {
-        setTimeout(() => resolve('ticket'), 3000);
-    });
+    try {
+        let ticket = await promiseWifeBringingTickets;
 
+        let [popcorn, candy, coke, drinks] = await Promise.all([getPopcorn, getCandy, getCoke, getColdDrinks]);
 
-    const getPopcorn =new Promise((resolve,reject) => resolve('popcorn'));
-    const addButter =new Promise((resolve,reject) => resolve('butter'));
-
-
-
-
-    let ticket= await promiseWifeBringingTickets;
-
-    console.log(`wife:I have ${ticket}`);
-    console.log('husband: we should go in');
-    console.log('wife: no, I am hungry');
-
-
-    let popcorn = await getPopcorn;
-
-    console.log(`husbund : i got some ${popcorn}`);
-    console.log('husband: we should go in');
-    console.log('wife:  I need butter on my popcorn');
-
-    let butter= await addButter;
-    
-    console.log(`husbund : i got some ${butter}`);
-    console.log('husband: anything else ');
-    console.log('wife: lets get we are getting late');
-    console.log(`husband: thanku for reminder *grins*`);
-
-
-    const getColdDrinks = new Promise((resolve, reject) => {
-        setTimeout(() => resolve('cold drinks'), 2000);
-    });
-
-    let drinks = await getColdDrinks;
-
-    console.log(`husband: I got some ${drinks}`);
-    console.log('husband: Here we go, everything is ready!');
-
-    return ticket
+        console.log(`${popcorn}, ${candy}, ${coke}, ${drinks}`);
+        return ticket;
+    } catch (error) {
+        
+        console.error('An error occurred:', error);
+        throw error; // Re-throw the error to be handled by the caller
+    }
 };
 
 preMovie().then((m) => console.log(`person 3: shown ${m}`));
-
 
 console.log('person4: show ticket');
 console.log('person5: show ticket');
