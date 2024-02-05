@@ -4,7 +4,20 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      integrity="sha512-DaPv4H8+eHr+U9kV8zJc8N1FxU0GJHswe2xY8w7F3y7YSs69yEesC4R8iGJ3Bb5qTb7ZdR7u6pJ/J5x5mT8j0w=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <title>Document</title>
+    <style>
+      .delete-icon {
+        cursor: pointer;
+        color: red;
+      }
+    </style>
   </head>
   <body style="margin: 0">
     <form onsubmit="handleFormSubmit(event)">
@@ -18,7 +31,7 @@
     </form>
     <ul id="listOfitems"></ul>
   </body>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js "></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.4/axios.min.js"></script>
   <script>
     function handleFormSubmit(event) {
       event.preventDefault();
@@ -50,11 +63,10 @@
       const childElem = document.createElement('li');
       childElem.textContent = obj.username + '-' + obj.email + '-' + obj.phone;
 
-      const deleteButton = document.createElement('button');
-      deleteButton.type = "button";
-      deleteButton.textContent = "Delete";
-      deleteButton.onclick = () => {
-        axios.delete('https://crudcrud.com/api/da0f9cff4dcf490382d8fa9037b69d15/' + obj._id)
+      const deleteIcon = document.createElement('i');
+      deleteIcon.classList.add('fas', 'fa-trash-alt', 'delete-icon');
+      deleteIcon.onclick = () => {
+        axios.delete(`https://crudcrud.com/api/da0f9cff4dcf490382d8fa9037b69d15/${obj._id}`)
           .then(response => {
             localStorage.removeItem(obj.email);
             parentElem.removeChild(childElem);
@@ -64,22 +76,7 @@
           });
       };
 
-      const editButton = document.createElement('button');
-      editButton.type = "button";
-      editButton.textContent = "Edit";
-      editButton.onclick = () => {
-        // Remove user details from the screen and local storage
-        parentElem.removeChild(childElem);
-        localStorage.removeItem(obj.email);
-
-        // Populate input fields with existing values
-        document.getElementById('username').value = obj.username;
-        document.getElementById('email').value = obj.email;
-        document.getElementById('phone').value = obj.phone;
-      };
-
-      childElem.appendChild(deleteButton);
-      childElem.appendChild(editButton);
+      childElem.appendChild(deleteIcon);
       parentElem.appendChild(childElem);
     }
 
